@@ -1,0 +1,152 @@
+.menu {
+  position: fixed;
+  top: 0;
+  right: 0;
+  transition: visibility 0.35s linear, opacity 0.35s linear;
+  visibility: hidden;
+  opacity: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.3);
+  display: flex;
+  justify-content: flex-end;
+}
+
+.menu_opened {
+  display: flex;
+  visibility: visible;
+  opacity: 1;
+  z-index: 2;
+}
+
+.menu__container {
+  background-color: #202020;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+
+  width: 520px;
+}
+
+.menu__items {
+  margin: 159px 0 0 0;
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  align-items: center;
+  max-width: 340px;
+  gap: 28px;
+}
+
+.menu__item {
+  list-style: none;
+}
+
+.menu__link {
+  padding: 0;
+  margin: 0;
+  color: #fff;
+  text-align: center;
+  font-family: "Inter", "Arial", sans-serif;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  transition: opacity 0.4s linear;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.menu__link:active {
+  text-decoration: underline solid #fff 2px;
+  text-underline-offset: 9px;
+}
+
+.menu__link:hover {
+  opacity: 0.8;
+}
+
+.menu__profile {
+  padding: 0;
+  margin-top: auto;
+  margin-bottom: 92px;
+  display: flex;
+}
+
+.menu__profile-link {
+  display: flex;
+  align-self: flex-end;
+  padding: 0;
+  margin: 0;
+  color: #fff;
+  text-align: center;
+  font-family: "Inter", "Arial", sans-serif;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  transition: opacity 0.3s linear;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.menu__profile-link:hover {
+  opacity: 0.8;
+}
+
+.menu__profile-link:active {
+  text-decoration: underline solid #fff 2px;
+  text-underline-offset: 9px;
+}
+
+.menu__profile-logo {
+  width: 10.383px;
+  height: 10.669px;
+  border-radius: 6px;
+  background: #313131;
+  margin: 0 0 0 5px;
+  padding: 7px;
+}
+
+.menu__button-close {
+  background-image: url(../../images/buttonClose.svg);
+  border: 0;
+  padding: 0;
+  width: 30px;
+  height: 30px;
+  background-size: cover;
+  background-color: #202020;
+  transition: opacity 0.3s linear;
+  cursor: pointer;
+  position: absolute;
+  top: 22.44px;
+  right: 22.44px;
+}
+
+.menu__button-close:hover {
+  opacity: 0.8;
+}
+
+@media screen and (max-width: 320px) {
+  .menu__button-close {
+    top: 13.44px;
+    right: 13.44px;
+  }
+
+  .menu__items {
+    margin: 144px 0 0 0;
+  }
+
+  .menu__items {
+    gap: 24px;
+  }
+
+  .menu__profile {
+    margin-bottom: 48px;
+  }
+
+  .menu__container {
+    width: 100%;
+  }
+}
