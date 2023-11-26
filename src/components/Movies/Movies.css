@@ -3,6 +3,18 @@
   margin: 0 70px;
 }
 
+.movies__error-text {
+  padding: 0;
+  margin: 11px 0 0 0;
+  color: #ee3465;
+  font-family: "Inter", "Arial", sans-serif;
+  font-size: 10px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  display: block;
+}
+
 @media screen and (max-width: 768px) {
   .movies {
     margin: 0 30px;
