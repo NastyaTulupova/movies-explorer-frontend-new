@@ -5,25 +5,27 @@ function MoviesCard({ card, onSave, onDelete, savedMovies }) {
   const [saved, setSaved] = React.useState(false);
   const [textButton, setTextButton] = React.useState("Сохранить");
   const { pathname } = useLocation();
-  const [liked, setLiked] = React.useState(false);
+ // const [liked, setLiked] = React.useState(false);
   const duration = card.duration;
 let likedId;
+let liked = false;
 
-/*function setLikedCard() {
-
-   return savedMovies.some((item) => {
+ liked = savedMovies.some((item) => {
       if (item.movieId === card.movieId) {
-        setLiked(true);
-        return (
         likedId = item._id;
-        )
+        return true;
       }
-      else {setLiked(false);
-    }})} */
+      return false;
+ })
 
   function handleSavedToggle() {
     setSaved(!saved);
-    setTextButton("");
+    console.log(saved);
+    if (!saved) {
+    setTextButton("");}
+    else {
+    setTextButton("Сохранить");
+    }
   }
 
   function restructDuration(duration) {
@@ -58,11 +60,21 @@ let likedId;
       {pathname === "/movies" ? (
         <button
           type="button"
-          className={`movies-card__button movies-card__button${saved} ? "_saved" : "_save"
-          `}
+          className={`movies-card__button movies-card__button${
+            saved&&liked ? "_saved" : "_save"
+          }`}
         onClick = {() => {
-          saved ? (handleSavedToggle && onSave(card)) : onDelete(card._id)
-        }}
+         // saved ? handleSavedToggle() : (handleSavedToggle() && onSave(card))
+         // !saved && handleSavedToggle ? onSave(card) : onDelete(card._id ? card._id : likedId)
+         handleSavedToggle();
+        // !saved ? onSave(card) : onDelete(card._id ? card._id : likedId)
+        if (!saved && !liked) {
+          onSave(card)}
+         /*else {
+          onDelete(card._id ? card._id : likedId)
+        }*/
+      }
+      } 
         >
           {textButton}
         </button>
@@ -70,10 +82,11 @@ let likedId;
         <button
           type="button"
           className="movies-card__button movies-card__button_delete"
+        //  onClick= {onDelete(card._id ? card._id : likedId)}
         />
       )}
     </li>
   );
-}
+      }
 
 export default MoviesCard;

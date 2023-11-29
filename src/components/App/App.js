@@ -1,8 +1,7 @@
 import React, { useCallback } from "react";
-import { Route, Routes, useNavigate } from "react-router-dom";
+import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
 import ProtectedRoute from "../ProtectedRoute/ProtectedRoute";
 
-import "./App.css";
 import Header from "../Header/Header";
 import Main from "../Main/Main";
 import Movies from "../Movies/Movies";
@@ -29,23 +28,27 @@ function App() {
   const [tooltipIcon, setTooltipIcon] = React.useState("");
   const [currentUser, setCurrentUser] = React.useState({});
   const [errorMessage, setErrorMessage] = React.useState("");
-  const [savedMovies, setSavedMovies] = React.useState(null);
+  const [savedMovies, setSavedMovies] = React.useState([]);
   const [errorServerText, setErrorServerText] = React.useState("");
   const [preloader, setPreloader] = React.useState(false);
   const [defaultMovies, setDefaultMovies] = React.useState([]);
 
   const navigate = useNavigate();
+  const location = useLocation();
 
   React.useEffect(() => {
-    if (loggedIn) {
+  //  setPreloader(true);
+    if(loggedIn) {
       Promise.all([MainApi.getData(), MainApi.getMovies()])
         .then(([resUser, resUsersSavedMovies]) => {
           setCurrentUser(resUser);
           setSavedMovies(resUsersSavedMovies);
         })
-        .catch((error) => console.log(`Произошла ошибка ${error}`));
-    }
-  }, [loggedIn]);
+        .catch((error) => console.log(`Произошла ошибка ${error}`))
+       // .finally(() =>{
+        //  setPreloader(false);}
+       // );
+    }}, [loggedIn]);
 
   React.useEffect(() => {
     handleDefaultMoviesCheck();
@@ -75,6 +78,8 @@ function App() {
   }
 
   function handleUpdateUser({ name, email }) {
+    setPreloader(true);
+
     MainApi.updateUserData({ name, email })
       .then((res) => {
         setCurrentUser({ name: res.name, email: res.email });
@@ -88,10 +93,14 @@ function App() {
         } else
           setErrorMessage("На сервере произошла ошибка. Повторите попытку");
         console.log(`Произошла ошибка ${err}`);
-      });
+      }).finally(() => {setPreloader(false)
+      }
+      );
   }
 
   function handleRegister(data) {
+    setPreloader(true);
+
     MainApi.register(data)
       .then(() => {
         setIsInfoTooltipPopupOpen(true);
@@ -105,10 +114,14 @@ function App() {
           setErrorMessage("Пользователь с указанным email уже существует");
         } else
           setErrorMessage("На сервере произошла ошибка. Повторите попытку");
-      });
+      })
+      .finally(() => {setPreloader(false)
+      }
+      );
   }
 
   function handleLogin(data) {
+    setPreloader(true);
     MainApi.authorize(data)
       .then((data) => {
         localStorage.setItem("loggedIn", true);
@@ -125,7 +138,9 @@ function App() {
           setErrorMessage("Вы ввели неправильный логин или пароль");
         } else
           setErrorMessage("На сервере произошла ошибка. Повторите попытку");
-      });
+      }).finally(() => {setPreloader(false)
+      }
+      );
   }
 
   const handleTokenCheck = () => {
@@ -138,7 +153,7 @@ function App() {
             email: data.email,
             name: data.name,
           });
-          navigate("/movies", { replace: true });
+         // navigate(location);
         })
         .catch((error) => console.log(`Произошла ошибка ${error}`));
     }
@@ -148,6 +163,9 @@ function App() {
     setLoggedIn(false);
     localStorage.removeItem("loggedIn");
     localStorage.removeItem("defaultMovies");
+    localStorage.removeItem("moviesCheckboxActive");
+    localStorage.removeItem("usersRequest");
+   // localStorage.removeItem();
     setCurrentUser({});
     navigate("/");
   }
@@ -159,6 +177,7 @@ function App() {
   // ФИЛЬМЫ:
 
   function handleGetDefaultMovies() {
+    setPreloader(true);
     moviesApi
       .getMovies()
       .then((res) => {
@@ -175,7 +194,9 @@ function App() {
         console.log(`Произошла ошибка ${err}`);
         setDefaultMovies([]);
         localStorage.removeItem("defaultMovies");
-      });
+      }).finally(() => {setPreloader(false)
+      }
+      );
   }
 
   function handleDefaultMoviesCheck() {
@@ -187,17 +208,23 @@ function App() {
   }
 
   function handleSaveMovie(movie) {
+   // setPreloader(true);
     mainApi
       .addMovies(movie)
-      .then((savedMovies) => {
-        setSavedMovies([savedMovies, ...savedMovies]);
+      .then((item) => {
+        setSavedMovies([item, ...savedMovies]);
+        console.log(savedMovies);
       })
       .catch((err) => {
         console.log(`Произошла ошибка ${err}`);
-      });
+      })
+      //.finally(() => {setPreloader(false)
+     // }
+      //);
   }
 
   function handleDeleteMovie(_id) {
+   // setPreloader(true);
     mainApi
       .deleteMovies(_id)
       .then(() => {
@@ -206,7 +233,10 @@ function App() {
       })
       .catch((err) => {
         console.log(`Произошла ошибка ${err}`);
-      });
+      })
+      //.finally(() => {setPreloader(false)
+      //}
+      //);
   }
 
   return (
@@ -214,7 +244,7 @@ function App() {
       <div className="App">
         <Routes>
           <Route
-            path="/"
+            exact path="/"
             element={
               <>
                 <Header
@@ -246,6 +276,7 @@ function App() {
                   onSave={handleSaveMovie}
                   onDelete={handleDeleteMovie}
                   savedMovies={savedMovies}
+                  preloader={preloader}
                 />
                 <ProtectedRoute loggedIn={loggedIn} component={Footer} />
               </>
@@ -269,6 +300,7 @@ function App() {
                   onSave={handleSaveMovie}
                   onDelete={handleDeleteMovie}
                   savedMovies={savedMovies}
+                  preloader={preloader}
                 />
                 <ProtectedRoute loggedIn={loggedIn} component={Footer} />
               </>
@@ -290,6 +322,7 @@ function App() {
                   onUpdateUser={handleUpdateUser}
                   signOut={signOut}
                   errorMessage={errorMessage}
+                  preloader={preloader}
                 />
               </>
             }
@@ -302,6 +335,7 @@ function App() {
                 handleLogin={handleLogin}
                 loggedIn={loggedIn}
                 errorMessage={errorMessage}
+                preloader={preloader}
               />
             }
           />
