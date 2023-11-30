@@ -76,7 +76,7 @@ React.useEffect(() => {
       {preloader ? <Preloader /> :
         moviesToRender.map((card) => (
           <MoviesCard 
-          key={card.id} 
+          key={card.movieId} 
           card={card} 
           onSave={onSave}
           onDelete={onDelete}

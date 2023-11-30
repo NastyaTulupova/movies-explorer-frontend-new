@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 
 function MoviesCard({ card, onSave, onDelete, savedMovies }) {
@@ -70,7 +70,8 @@ let liked = false;
         // !saved ? onSave(card) : onDelete(card._id ? card._id : likedId)
         if (!saved && !liked) {
           onSave(card)}
-         /*else {
+       /*  else {
+          console.log(saved, liked, card._id, likedId )
           onDelete(card._id ? card._id : likedId)
         }*/
       }
@@ -78,13 +79,14 @@ let liked = false;
         >
           {textButton}
         </button>
-      ) : (
+      ) : <></>}
+      {pathname === "/saved-movies" ? (
         <button
-          type="button"
-          className="movies-card__button movies-card__button_delete"
-        //  onClick= {onDelete(card._id ? card._id : likedId)}
-        />
-      )}
+        type="button"
+        className="movies-card__button movies-card__button_delete"
+      onClick= {() => {onDelete(card._id ? card._id : likedId)}}
+      />
+      ) : <></>}
     </li>
   );
       }

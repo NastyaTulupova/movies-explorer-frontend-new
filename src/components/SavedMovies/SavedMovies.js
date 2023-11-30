@@ -20,8 +20,8 @@ function SavedMovies({errorServerText, onSave, onDelete, savedMovies,} ) {
   }, [setValidationError]);
 
   useEffect(() => {
-    setValidationError("");
-  }, [setValidationError, navigate]);
+    clearValidationError();
+  }, [clearValidationError, navigate]);
 
   useEffect(() => {
     console.log(`savedMovies: ${savedMovies}`);
@@ -51,14 +51,17 @@ function SavedMovies({errorServerText, onSave, onDelete, savedMovies,} ) {
     setPreloader(true);
     setValidationError("");
     try {
+      if(usersRequest.length > 0) {
         const moviesToShow = await handleSearch(responsedMovies, usersRequest);
+        console.log(`usersRequest: ${usersRequest}`);
         console.log(`moviesToShow saved: ${moviesToShow.length}`);
-        if (moviesToShow.length === 0) {
+        if (moviesToShow.length === 0 ) {
          setValidationError("Ничего не найдено");
         }
         else {
           setResponsedMovies(moviesToShow);
       }
+    }
       return;
     } catch (err) {
       console.log(`Произошла ошибка ${err}`);

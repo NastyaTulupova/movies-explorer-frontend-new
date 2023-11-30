@@ -8,8 +8,8 @@ function Movies({
   defaultMovies,
   errorServerText,
   onSave,
-  onDelete,
   savedMovies,
+  onDelete
 }) {
   const [moviesCheckboxActive, setMoviesCheckboxActive] = useState(false);
   const [preloader, setPreloader] = useState(false);
@@ -61,7 +61,6 @@ function Movies({
 
     setResponsedMovies([]);
     setValidationError("");
-//    setTimeout(5000);
     try {
         const moviesToShow = await handleSearch(defaultMovies, usersRequest);
         console.log(`moviesToShow: ${moviesToShow.length}`);
