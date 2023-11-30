@@ -6,7 +6,7 @@ import useWindowSize from "../../hooks/useWindowSize";
 
 
 
-function MoviesCardList({ cards, preloader, onSave, onDelete, savedMovies, onClick }) {
+function MoviesCardList({ cards, preloader, onSave, onDelete, savedMovies }) {
 
   const [countMoviesToAdd, setCountMoviesToAdd] = React.useState(0);
   const [countMoviesToRender, setCountMoviesToRender] = React.useState(0);
@@ -76,7 +76,7 @@ React.useEffect(() => {
       {preloader ? <Preloader /> :
         moviesToRender.map((card) => (
           <MoviesCard 
-          key={card.movieId} 
+          key={card.movieId || card.id} 
           card={card} 
           onSave={onSave}
           onDelete={onDelete}

@@ -63,7 +63,6 @@ function Movies({
     setValidationError("");
     try {
         const moviesToShow = await handleSearch(defaultMovies, usersRequest);
-        console.log(`moviesToShow: ${moviesToShow.length}`);
         if (moviesToShow.length === 0) {
           setValidationError("Ничего не найдено");
         }

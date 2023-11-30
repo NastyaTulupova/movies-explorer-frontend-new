@@ -5,27 +5,31 @@ function MoviesCard({ card, onSave, onDelete, savedMovies }) {
   const [saved, setSaved] = React.useState(false);
   const [textButton, setTextButton] = React.useState("Сохранить");
   const { pathname } = useLocation();
- // const [liked, setLiked] = React.useState(false);
+  const isSavedMovies = true;
   const duration = card.duration;
-let likedId;
-let liked = false;
+  let likedId;
+  let liked = false;
 
- liked = savedMovies.some((item) => {
-      if (item.movieId === card.movieId) {
-        likedId = item._id;
-        return true;
-      }
-      return false;
- })
+  useEffect(() => {
+    if (liked) {
+      setTextButton("");
+    }
+  }, [liked]);
+
+  liked = savedMovies.some((item) => {
+    console.log(item.movieId);
+    if (item.movieId === card.movieId) {
+      likedId = item._id;
+      return true;
+    }
+    return false;
+  });
 
   function handleSavedToggle() {
     setSaved(!saved);
-    console.log(saved);
     if (!saved) {
-    setTextButton("");}
-    else {
-    setTextButton("Сохранить");
-    }
+      setTextButton("");
+    } else setTextButton("Сохранить");
   }
 
   function restructDuration(duration) {
@@ -41,8 +45,6 @@ let liked = false;
 
   const newDuration = restructDuration(duration);
 
- 
-
   return (
     <li className="movies-card" aria-label="Карточка фильма">
       <div className="movies-card__info-block">
@@ -55,40 +57,46 @@ let liked = false;
         target="_blank"
         rel="noreferrer"
       >
-        <img src={card.image} alt={card.nameRU} className="movies-card__image" />
+        <img
+          src={pathname === "/saved-movies" ? `${card.image}` : `${card.image}`}
+          alt={card.nameRU}
+          className="movies-card__image"
+        />
       </a>
       {pathname === "/movies" ? (
         <button
           type="button"
           className={`movies-card__button movies-card__button${
-            saved&&liked ? "_saved" : "_save"
-          }`}
-        onClick = {() => {
-         // saved ? handleSavedToggle() : (handleSavedToggle() && onSave(card))
-         // !saved && handleSavedToggle ? onSave(card) : onDelete(card._id ? card._id : likedId)
-         handleSavedToggle();
-        // !saved ? onSave(card) : onDelete(card._id ? card._id : likedId)
-        if (!saved && !liked) {
-          onSave(card)}
-       /*  else {
-          console.log(saved, liked, card._id, likedId )
-          onDelete(card._id ? card._id : likedId)
-        }*/
-      }
-      } 
+            saved || liked ? "_saved" : "_save"
+          }
+          `}
+          onClick={() => {
+            handleSavedToggle();
+            if (!saved && !liked) {
+              onSave(card);
+            } else if (isSavedMovies || liked) {
+              onDelete(card._id ? card._id : likedId);
+            }
+          }}
         >
           {textButton}
         </button>
-      ) : <></>}
+      ) : (
+        <></>
+      )}
       {pathname === "/saved-movies" ? (
         <button
-        type="button"
-        className="movies-card__button movies-card__button_delete"
-      onClick= {() => {onDelete(card._id ? card._id : likedId)}}
-      />
-      ) : <></>}
+          type="button"
+          className="movies-card__button movies-card__button_delete"
+          onClick={() => {
+            onDelete(card._id ? card._id : likedId);
+          }}
+        />
+      ) : (
+        <></>
+      )}
     </li>
   );
-      }
+}
 
 export default MoviesCard;
