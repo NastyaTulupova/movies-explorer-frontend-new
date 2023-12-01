@@ -117,7 +117,7 @@ deleteMovies = (movieId) => {
 
 const mainApi = new MainApi(
   {
-    baseUrl: "https://api.mesto.tulupova.nomoredomainsrocks.ru",
+    baseUrl: "https://api.movies.tulupova.nomoredomainsrocks.ru",
    // baseUrl: "http://localhost:3000",
   });
 
