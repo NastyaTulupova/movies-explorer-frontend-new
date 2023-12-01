@@ -140,15 +140,10 @@
   .profile__text {
     margin: 15px 0;
   }
-
-  .profile__form {
-    margin: 0px 0 198px 0;
-  }
 }
 
 @media screen and (max-width: 500px) {
   .profile__form {
-    margin: 0 0 300px 0;
     width: 100%;
   }
   .profile {
@@ -175,9 +170,7 @@
 }
 
 @media screen and (max-width: 320px) {
-  .profile__form {
-    margin: 0px 0 366px 0;
-  }
+  
   .profile {
     margin: 66px auto;
   }

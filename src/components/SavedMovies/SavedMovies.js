@@ -4,14 +4,13 @@ import MoviesCardList from "../MoviesCardList/MoviesCardList";
 import { useNavigate } from "react-router-dom";
 import Preloader from "../Preloader/Preloader";
 
-function SavedMovies({errorServerText, onSave, onDelete, savedMovies,} ) {
+function SavedMovies({ errorServerText, onSave, onDelete, savedMovies }) {
   const [preloader, setPreloader] = useState(false);
   const [responsedMovies, setResponsedMovies] = useState([]);
   const [moviesCheckboxActive, setMoviesCheckboxActive] = useState(false);
   const [shortMovies, setShortMovies] = useState([]);
   const [usersRequest, setUsersRequest] = useState("");
   const [validationError, setValidationError] = useState("");
-  
 
   const navigate = useNavigate();
 
@@ -25,22 +24,19 @@ function SavedMovies({errorServerText, onSave, onDelete, savedMovies,} ) {
 
   useEffect(() => {
     setResponsedMovies(savedMovies);
-  }, [])
+  }, [savedMovies]);
 
   useEffect(() => {
     handleGetMovies(usersRequest);
     handleSetShortMovies();
   }, [usersRequest, moviesCheckboxActive]);
 
-
-
   function handleSearch(moviesList, word) {
     return moviesList.filter((movie) => {
-      return (movie.nameEN.toLowerCase().includes(word.toLowerCase()) 
-      || movie.nameRU
-        .toLowerCase()
-        .includes(
-          word.toLowerCase()))
+      return (
+        movie.nameEN.toLowerCase().includes(word.toLowerCase()) ||
+        movie.nameRU.toLowerCase().includes(word.toLowerCase())
+      );
     });
   }
 
@@ -48,13 +44,13 @@ function SavedMovies({errorServerText, onSave, onDelete, savedMovies,} ) {
     setPreloader(true);
     setValidationError("");
     try {
-      if(usersRequest.length > 0) {
+      if (usersRequest.length > 0) {
         const moviesToShow = await handleSearch(responsedMovies, usersRequest);
-        if (moviesToShow.length === 0 ) {
-         setValidationError("Ничего не найдено"); 
+        if (moviesToShow.length === 0) {
+          setValidationError("Ничего не найдено");
         }
-          setResponsedMovies(moviesToShow);
-    }
+        setResponsedMovies(moviesToShow);
+      }
       return;
     } catch (err) {
       console.log(`Произошла ошибка ${err}`);
@@ -85,27 +81,28 @@ function SavedMovies({errorServerText, onSave, onDelete, savedMovies,} ) {
         usersRequest={usersRequest}
         handleCheckboxChange={handleCheckboxChange}
       />
-{preloader && <Preloader/>}
-{(validationError || errorServerText) &&
-      <p
-        className={` ${
-          validationError || errorServerText ? "movies__error-text" : ""
-        }`}
-      >
-        {validationError || errorServerText}
-      </p>}
+      {preloader && <Preloader />}
+      {(validationError || errorServerText) && (
+        <p
+          className={` ${
+            validationError || errorServerText ? "movies__error-text" : ""
+          }`}
+        >
+          {validationError || errorServerText}
+        </p>
+      )}
 
-      {!preloader && 
-      <MoviesCardList
-        cards={!moviesCheckboxActive ? responsedMovies : shortMovies}
-        preloader={preloader}
-        onSave={onSave}
-        onDelete={onDelete}
-        savedMovies={savedMovies}
-      />}
+      {!preloader && (
+        <MoviesCardList
+          cards={!moviesCheckboxActive ? responsedMovies : shortMovies}
+          preloader={preloader}
+          onSave={onSave}
+          onDelete={onDelete}
+          savedMovies={savedMovies}
+        />
+      )}
     </main>
   );
 }
 
 export default SavedMovies;
-

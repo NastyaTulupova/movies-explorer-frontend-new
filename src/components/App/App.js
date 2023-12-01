@@ -37,18 +37,19 @@ function App() {
   const location = useLocation();
 
   React.useEffect(() => {
-  //  setPreloader(true);
-    if(loggedIn) {
+      setPreloader(true);
+    if (loggedIn) {
       Promise.all([MainApi.getData(), MainApi.getMovies()])
         .then(([resUser, resUsersSavedMovies]) => {
           setCurrentUser(resUser);
           setSavedMovies(resUsersSavedMovies);
         })
         .catch((error) => console.log(`Произошла ошибка ${error}`))
-       // .finally(() =>{
-        //  setPreloader(false);}
-       // );
-    }}, [loggedIn]);
+       .finally(() =>{
+        setPreloader(false);}
+       );
+    }
+  }, [loggedIn]);
 
   React.useEffect(() => {
     handleDefaultMoviesCheck();
@@ -93,9 +94,10 @@ function App() {
         } else
           setErrorMessage("На сервере произошла ошибка. Повторите попытку");
         console.log(`Произошла ошибка ${err}`);
-      }).finally(() => {setPreloader(false)
-      }
-      );
+      })
+      .finally(() => {
+        setPreloader(false);
+      });
   }
 
   function handleRegister(data) {
@@ -115,9 +117,9 @@ function App() {
         } else
           setErrorMessage("На сервере произошла ошибка. Повторите попытку");
       })
-      .finally(() => {setPreloader(false)
-      }
-      );
+      .finally(() => {
+        setPreloader(false);
+      });
   }
 
   function handleLogin(data) {
@@ -138,9 +140,10 @@ function App() {
           setErrorMessage("Вы ввели неправильный логин или пароль");
         } else
           setErrorMessage("На сервере произошла ошибка. Повторите попытку");
-      }).finally(() => {setPreloader(false)
-      }
-      );
+      })
+      .finally(() => {
+        setPreloader(false);
+      });
   }
 
   const handleTokenCheck = () => {
@@ -153,7 +156,7 @@ function App() {
             email: data.email,
             name: data.name,
           });
-         // navigate(location);
+          // navigate(location);
         })
         .catch((error) => console.log(`Произошла ошибка ${error}`));
     }
@@ -165,7 +168,7 @@ function App() {
     localStorage.removeItem("defaultMovies");
     localStorage.removeItem("moviesCheckboxActive");
     localStorage.removeItem("usersRequest");
-   // localStorage.removeItem();
+    localStorage.removeItem("preparedMovies");
     setCurrentUser({});
     navigate("/");
   }
@@ -184,8 +187,6 @@ function App() {
         const preparedMovies = prepareMoviesHandle(res);
         localStorage.setItem("defaultMovies", JSON.stringify(preparedMovies));
         setDefaultMovies(preparedMovies);
-        console.log(`def mov: ${defaultMovies}`);
-        console.log(`local stor: ${localStorage.getItem("defaultMovies")}`);
       })
       .catch((err) => {
         setErrorServerText(
@@ -194,9 +195,10 @@ function App() {
         console.log(`Произошла ошибка ${err}`);
         setDefaultMovies([]);
         localStorage.removeItem("defaultMovies");
-      }).finally(() => {setPreloader(false)
-      }
-      );
+      })
+      .finally(() => {
+        setPreloader(false);
+      });
   }
 
   function handleDefaultMoviesCheck() {
@@ -208,7 +210,7 @@ function App() {
   }
 
   function handleSaveMovie(movie) {
-   // setPreloader(true);
+    setPreloader(true);
     mainApi
       .addMovies(movie)
       .then((item) => {
@@ -218,13 +220,13 @@ function App() {
       .catch((err) => {
         console.log(`Произошла ошибка ${err}`);
       })
-      //.finally(() => {setPreloader(false)
-     // }
-      //);
+      .finally(() => {
+        setPreloader(false);
+      });
   }
 
   function handleDeleteMovie(_id) {
-   // setPreloader(true);
+    setPreloader(true);
     mainApi
       .deleteMovies(_id)
       .then(() => {
@@ -234,9 +236,9 @@ function App() {
       .catch((err) => {
         console.log(`Произошла ошибка ${err}`);
       })
-      //.finally(() => {setPreloader(false)
-      //}
-      //);
+      .finally(() => {
+        setPreloader(false);
+      });
   }
 
   return (
@@ -244,7 +246,8 @@ function App() {
       <div className="App">
         <Routes>
           <Route
-            exact path="/"
+            exact
+            path="/"
             element={
               <>
                 <Header

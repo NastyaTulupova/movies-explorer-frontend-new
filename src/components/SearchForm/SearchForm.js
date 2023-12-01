@@ -2,18 +2,23 @@ import React from "react";
 import { useEffect } from "react";
 import useValidation from "../../hooks/useValidation";
 
-function SearchForm({ handleSearch, moviesCheckboxActive, usersRequest, handleCheckboxChange}) {
-  const {values, errors, handleChange, reset, isValid} = useValidation();
-  const {title} = values;
+function SearchForm({
+  handleSearch,
+  moviesCheckboxActive,
+  usersRequest,
+  handleCheckboxChange,
+}) {
+  const { values, errors, handleChange, reset, isValid } = useValidation();
+  const { title } = values;
 
-useEffect (() => {
-  reset({title: usersRequest});
-}, [usersRequest])
+  useEffect(() => {
+    reset({ title: usersRequest });
+  }, [usersRequest]);
 
-function handleSubmit(evt) {
-  evt.preventDefault();
-  handleSearch(title);
-}
+  function handleSubmit(evt) {
+    evt.preventDefault();
+    handleSearch(title);
+  }
 
   return (
     <section className="search-form" aria-label="Форма поиска">
@@ -24,27 +29,35 @@ function handleSubmit(evt) {
             className="search-form__input"
             name="title"
             placeholder="Фильм"
-            value = {values.title || ""}
+            value={values.title || ""}
             onChange={handleChange}
             required
           />
-          <button 
-          className={`search-form__button ${!isValid ? "search-form__button_disabled": ""}`} 
-          type="submit"
-          disabled={!isValid}
+          <button
+            className={`search-form__button ${
+              !isValid ? "search-form__button_disabled" : ""
+            }`}
+            type="submit"
+            disabled={!isValid}
           >
             Поиск
           </button>
         </div>
-        <p className={`form__error-text ${errors.title ? "form__error-text_visible " : ""}`}>{errors.title}</p>
+        <p
+          className={`form__error-text ${
+            errors.title ? "form__error-text_visible " : ""
+          }`}
+        >
+          {errors.title}
+        </p>
         <div className="search-form__toggle-with-text">
           <label className="search-form__toggle-container">
-            <input 
-            type="checkbox" 
-            className="search-form__checkbox" 
-            value={moviesCheckboxActive}
-            checked={moviesCheckboxActive}
-            onChange={handleCheckboxChange}
+            <input
+              type="checkbox"
+              className="search-form__checkbox"
+              value={moviesCheckboxActive}
+              checked={moviesCheckboxActive}
+              onChange={handleCheckboxChange}
             />
             <span className="search-form__slider" />
           </label>

@@ -58,7 +58,7 @@ function MoviesCard({ card, onSave, onDelete, savedMovies }) {
         rel="noreferrer"
       >
         <img
-          src={pathname === "/saved-movies" ? `${card.image}` : `${card.image}`}
+          src={card.image}
           alt={card.nameRU}
           className="movies-card__image"
         />

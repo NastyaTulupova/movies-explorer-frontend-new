@@ -9,7 +9,7 @@ function Movies({
   errorServerText,
   onSave,
   savedMovies,
-  onDelete
+  onDelete,
 }) {
   const [moviesCheckboxActive, setMoviesCheckboxActive] = useState(false);
   const [preloader, setPreloader] = useState(false);
@@ -39,10 +39,10 @@ function Movies({
 
   function handleSearch(moviesList, word) {
     return moviesList.filter((movie) => {
-      return (movie.nameEN.toLowerCase().includes(word.toLowerCase()) || movie.nameRU
-        .toLowerCase()
-        .includes(
-          word.toLowerCase()))
+      return (
+        movie.nameEN.toLowerCase().includes(word.toLowerCase()) ||
+        movie.nameRU.toLowerCase().includes(word.toLowerCase())
+      );
     });
   }
 
@@ -62,24 +62,20 @@ function Movies({
     setResponsedMovies([]);
     setValidationError("");
     try {
-        const moviesToShow = await handleSearch(defaultMovies, usersRequest);
-        if (moviesToShow.length === 0) {
-          setValidationError("Ничего не найдено");
-        }
-        // если результат !=0, кладем в локалсторедж последний реквест
-        // и сетим найденные фильмы
-        else {
-          setResponsedMovies(moviesToShow);
-          localStorage.setItem("lastRequest", usersRequest);
-          localStorage.setItem(
-            "lastMoviesForShow",
-            JSON.stringify(moviesToShow)
-          );
-          localStorage.setItem(
-            "lastCheckboxActive",
-            JSON.stringify(moviesCheckboxActive)
-          );
-        
+      const moviesToShow = await handleSearch(defaultMovies, usersRequest);
+      if (moviesToShow.length === 0) {
+        setValidationError("Ничего не найдено");
+      }
+      // если результат !=0, кладем в локалсторедж последний реквест
+      // и сетим найденные фильмы
+      else {
+        setResponsedMovies(moviesToShow);
+        localStorage.setItem("lastRequest", usersRequest);
+        localStorage.setItem("lastMoviesForShow", JSON.stringify(moviesToShow));
+        localStorage.setItem(
+          "lastCheckboxActive",
+          JSON.stringify(moviesCheckboxActive)
+        );
       }
       return;
     } catch (err) {
@@ -109,53 +105,6 @@ function Movies({
     return;
   }
 
-  /*
-   // кол-во карточек при нажатии на Еще в зависимости от экрана
-   function handleShowMoreButtonClick() {
-    if (widthWindow > 420) {
-      setMoviesToRender(moviesToRender + 7);
-    } else {
-      setMoviesToRender(moviesToRender + 5);
-    }
-}
-
-//кол-во карточек на странице:
-const countMoviesToAdd = useCallback(() => {
-  if (widthWindow > 420) {
-    setMoviesToRender(7);
-  } else {
-    setMoviesToRender(5);
-  } }, [widthWindow])
-
-  useEffect(() => {
-    if (usersRequest.length || moviesCheckboxActive) {
-      countMoviesToAdd();
-    }
-  }, [usersRequest, moviesCheckboxActive, countMoviesToAdd]);
-
-  const cards= useCallback((moviesCheckboxActive, responsedMovies, shortMovies) => {
-if (!moviesCheckboxActive) {
-  return responsedMovies;
-} else {
-  return shortMovies;
-}
-  }, []);
-
- useEffect(() => {
-  if (cards === null) {
-    setButtonMoreActive(false);
-  }
-    if (moviesToRender >= cards.length) {
-setButtonMoreActive(true);
-    } else {
-      setButtonMoreActive(false);
-    }
-  console.log(buttonMoreActive);
-  console.log(`moviesToRender ${moviesToRender} ${cards.length} ${preloader}`)
-  }, [cards, moviesToRender])
-*/
-
-
   return (
     <main className="movies">
       <SearchForm
@@ -165,22 +114,24 @@ setButtonMoreActive(true);
         handleCheckboxChange={handleCheckboxChange}
       />
       {preloader && <Preloader />}
-      {(validationError || errorServerText) &&
-      <p
-        className={` ${
-          validationError || errorServerText ? "movies__error-text" : ""
-        }`}
-      >
-        {validationError || errorServerText}
-      </p>}
-      {!preloader && !validationError && !errorServerText &&
-      <MoviesCardList
-        cards={!moviesCheckboxActive ? responsedMovies : shortMovies}
-        preloader={preloader}
-        onSave={onSave}
-        onDelete={onDelete}
-        savedMovies={savedMovies}
-      />}
+      {(validationError || errorServerText) && (
+        <p
+          className={` ${
+            validationError || errorServerText ? "movies__error-text" : ""
+          }`}
+        >
+          {validationError || errorServerText}
+        </p>
+      )}
+      {!preloader && !validationError && !errorServerText && (
+        <MoviesCardList
+          cards={!moviesCheckboxActive ? responsedMovies : shortMovies}
+          preloader={preloader}
+          onSave={onSave}
+          onDelete={onDelete}
+          savedMovies={savedMovies}
+        />
+      )}
     </main>
   );
 }
