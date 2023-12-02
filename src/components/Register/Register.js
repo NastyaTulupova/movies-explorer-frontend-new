@@ -1,14 +1,11 @@
 import React from "react";
-import isEmail from 'validator/es/lib/isEmail';
-import { useState } from 'react';
 import logoSite from "../../images/logoSite.svg";
 import {Link, Navigate, useLocation} from "react-router-dom";
 import useValidation from "../../hooks/useValidation";
 
-function Register({ handleRegister, errorMessage}) {
+function Register({ handleRegister, errorMessage, loggedIn}) {
 const {values, errors, isValid, handleChange} = useValidation();
-//const {name, email, password} = values;
-//const target = evt.target
+const pathname = useLocation();
 
   const handleSubmit = (evt) => {
     evt.preventDefault();
@@ -17,7 +14,7 @@ const {values, errors, isValid, handleChange} = useValidation();
   };
 
   return (
-
+    loggedIn && (pathname.pathname === "/signup") ? <Navigate to="/" replace /> :
           <section className="form">
       <div className="form__container">
         <Link to="/" className="form__link-logo">

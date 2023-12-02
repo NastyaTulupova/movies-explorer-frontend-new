@@ -4,7 +4,7 @@
 
 ## Ссылки на проект
 
-
+Merge Request: https://github.com/NastyaTulupova/movies-explorer-frontend-new/pull/2
 
 Репозиторий Github: https://github.com/NastyaTulupova/movies-explorer-frontend-new
 

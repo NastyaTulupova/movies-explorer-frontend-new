@@ -1,22 +1,17 @@
 import React from "react";
 
-import { Navigate, Link } from "react-router-dom";
+import { Navigate, Link, useLocation } from "react-router-dom";
 import isEmail from "validator/es/lib/isEmail";
 import { useState } from "react";
 import logoSite from "../../images/logoSite.svg";
 
 function Login({ handleLogin, loggedIn, errorMessage }) {
-  /* const [values, errors, isValid, handleChange] = useValidateForm();
-
-  function handleSubmit(evt) {
-  evt.preventDefault();
-  const {email, password} = values;
-  handleLogin({email, password});
-  }*/
 
   const [values, setValues] = useState({});
   const [errors, setErrors] = useState({});
   const [isValid, setIsValid] = useState(false);
+
+  const pathname = useLocation();
 
   const handleChange = (evt) => {
     const target = evt.target;
@@ -43,8 +38,10 @@ function Login({ handleLogin, loggedIn, errorMessage }) {
   };
 
   loggedIn && <Navigate to="/movies" replace />;
+ 
 
   return (
+    loggedIn && (pathname.pathname === "/signin") ? <Navigate to="/" replace /> :
     <section className="form">
       <div className="form__container">
         <Link to="/" className="form__link-logo">

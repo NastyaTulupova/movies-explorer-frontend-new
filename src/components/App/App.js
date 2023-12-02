@@ -1,5 +1,5 @@
 import React, { useCallback } from "react";
-import { Route, Routes, useNavigate } from "react-router-dom";
+import { Navigate, Route, Routes, useNavigate } from "react-router-dom";
 import ProtectedRoute from "../ProtectedRoute/ProtectedRoute";
 
 import Header from "../Header/Header";
@@ -361,6 +361,7 @@ function App() {
               <Register
                 handleRegister={handleRegister}
                 errorMessage={errorMessage}
+                loggedIn={loggedIn}
               />
             }
           />
