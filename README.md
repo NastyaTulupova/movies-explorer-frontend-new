@@ -8,9 +8,9 @@
 
 Репозиторий Github: https://github.com/NastyaTulupova/movies-explorer-frontend-new
 
-API приложения: https://api.mesto.tulupova.nomoredomainsrocks.ru
+API приложения: https://api.movies.tulupova.nomoredomainsrocks.ru
 
-Фронтенд: https://mesto.tulupova.nomoredomainsrocks.ru
+Фронтенд: https://movies.tulupova.nomoredomainsrocks.ru
 
 Внешний API с фильмами: https://api.nomoreparties.co/beatfilm-movies 
 

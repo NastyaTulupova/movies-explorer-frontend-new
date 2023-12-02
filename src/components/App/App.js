@@ -1,5 +1,5 @@
 import React, { useCallback } from "react";
-import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
+import { Route, Routes, useNavigate } from "react-router-dom";
 import ProtectedRoute from "../ProtectedRoute/ProtectedRoute";
 
 import Header from "../Header/Header";
@@ -18,8 +18,10 @@ import { CurrentUserContext } from "../../contexts/CurrentUserContext";
 import { moviesApi } from "../../utils/MoviesApi";
 import prepareMoviesHandle from "../../utils/PrepareDefaultMovies";
 import mainApi from "../../utils/MainApi";
+import Preloader from "../Preloader/Preloader";
 
 function App() {
+  const [isLoading, setIsLoading] = React.useState(true);
   const [loggedIn, setLoggedIn] = React.useState(false);
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
   const [isInfoTooltipPopupOpen, setIsInfoTooltipPopupOpen] =
@@ -34,10 +36,9 @@ function App() {
   const [defaultMovies, setDefaultMovies] = React.useState([]);
 
   const navigate = useNavigate();
-  const location = useLocation();
 
   React.useEffect(() => {
-      setPreloader(true);
+    setPreloader(true);
     if (loggedIn) {
       Promise.all([MainApi.getData(), MainApi.getMovies()])
         .then(([resUser, resUsersSavedMovies]) => {
@@ -45,9 +46,10 @@ function App() {
           setSavedMovies(resUsersSavedMovies);
         })
         .catch((error) => console.log(`Произошла ошибка ${error}`))
-       .finally(() =>{
-        setPreloader(false);}
-       );
+        .finally(() => {
+          setPreloader(false);
+          setIsLoading(false);
+        });
     }
   }, [loggedIn]);
 
@@ -156,20 +158,26 @@ function App() {
             email: data.email,
             name: data.name,
           });
-          // navigate(location);
+
         })
         .catch((error) => console.log(`Произошла ошибка ${error}`));
+    }else {
+      setIsLoading(false)  
     }
   };
 
   function signOut() {
-    setLoggedIn(false);
+    
     localStorage.removeItem("loggedIn");
     localStorage.removeItem("defaultMovies");
     localStorage.removeItem("moviesCheckboxActive");
     localStorage.removeItem("usersRequest");
     localStorage.removeItem("preparedMovies");
-    setCurrentUser({});
+    localStorage.removeItem("lastRequest");
+    localStorage.removeItem("lastMoviesForShow");
+    localStorage.removeItem("lastCheckboxActive");
+    localStorage.removeItem("lastRequest");
+    setLoggedIn(false);
     navigate("/");
   }
 
@@ -239,6 +247,10 @@ function App() {
       .finally(() => {
         setPreloader(false);
       });
+  }
+
+  if (isLoading) {
+    return <Preloader />;
   }
 
   return (

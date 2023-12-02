@@ -120,6 +120,5 @@ const mainApi = new MainApi(
     baseUrl: "https://api.movies.tulupova.nomoredomainsrocks.ru",
    // baseUrl: "http://localhost:3000",
   });
-
 export default mainApi;
 

@@ -95,7 +95,7 @@
 }
 
 .form__button_signup {
-  margin: 129px 0 16px 0;
+  margin: 0px 0 16px 0;
 }
 
 .form__button:hover {
@@ -221,10 +221,6 @@ gap: 20px;
   .form__button {
     margin: 285px 0 16px 0;
     font-size: 12px;
-  }
-
-  .form__button_signup {
-    margin: 218px 0 16px 0;
   }
 
   .form__question {
