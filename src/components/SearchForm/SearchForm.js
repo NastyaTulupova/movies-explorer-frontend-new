@@ -20,6 +20,14 @@ function SearchForm({
     handleSearch(title);
   }
 
+  function newHandleChekboxChange (evt){
+    handleSearch(title);
+    evt.preventDefault();
+    handleCheckboxChange(evt)
+    
+
+  }
+
   return (
     <section className="search-form" aria-label="Форма поиска">
       <form className="search-form__form" onSubmit={handleSubmit} noValidate>
@@ -56,8 +64,8 @@ function SearchForm({
               type="checkbox"
               className="search-form__checkbox"
               value={moviesCheckboxActive}
-              checked={moviesCheckboxActive}
-              onChange={handleCheckboxChange}
+              checked={ moviesCheckboxActive}
+              onChange={ newHandleChekboxChange}
             />
             <span className="search-form__slider" />
           </label>

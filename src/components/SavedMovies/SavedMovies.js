@@ -27,6 +27,7 @@ function SavedMovies({ errorServerText, onSave, onDelete, savedMovies }) {
   }, [savedMovies]);
 
   useEffect(() => {
+    setResponsedMovies(savedMovies)
     handleGetMovies(usersRequest);
     handleSetShortMovies();
   }, [usersRequest, moviesCheckboxActive]);
@@ -45,12 +46,15 @@ function SavedMovies({ errorServerText, onSave, onDelete, savedMovies }) {
     setValidationError("");
     try {
       if (usersRequest.length > 0) {
+        setResponsedMovies(savedMovies);
+        console.log(responsedMovies);
         const moviesToShow = await handleSearch(responsedMovies, usersRequest);
         if (moviesToShow.length === 0) {
           setValidationError("Ничего не найдено");
         }
         setResponsedMovies(moviesToShow);
       }
+
       return;
     } catch (err) {
       console.log(`Произошла ошибка ${err}`);
@@ -72,7 +76,6 @@ function SavedMovies({ errorServerText, onSave, onDelete, savedMovies }) {
   function handleSetShortMovies() {
     setShortMovies(handleFindShortMovies(responsedMovies));
   }
-
   return (
     <main className="saved-movies">
       <SearchForm
