@@ -3,7 +3,7 @@ import { Link, useLocation } from "react-router-dom";
 
 import logoSite from "../../images/logoSite.svg";
 
-function Form({ title, children, button, question, redirect, link }) {
+function Form({ title, children, button, question, redirect, link, onSubmit }) {
   const path = useLocation();
 
   return (
@@ -13,7 +13,7 @@ function Form({ title, children, button, question, redirect, link }) {
           <img className="form__logo" alt="Логотип сайта" src={logoSite} />
         </Link>
         <h2 className="form__title">{title}</h2>
-        <form className="form__form">
+        <form className="form__form" onSubmit={onSubmit}>
           <div className="form__items">{children}</div>
           <button
             type="submit"
